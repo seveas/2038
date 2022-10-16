@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro">
+<style type="text/css">
+html, body {
+    height: 100%;
+    font-family: "Source Sans Pro";
+}
+html {
+    display: table;
+    margin: auto;
+}
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+div.section {
+    float: left;
+    padding: 0px 15px 120px 15px;
+}
+div.digit {
+    color: #333333;
+    float: left;
+    font-size: 5em;
+    font-weight: 100;
+    border-radius: 20px;
+    margin: 20px 1px;
+    font-variant-numeric: tabular-nums;
+    padding: 0px 0.3em;
+    background-color: #eeeeee;
+}
+#seconds>.digit {
+  color: #aa3333;
+  border-color: #aa3333;
+}
+h1, h3 {
+    text-align: center;
+}
+h1 {
+    font-size: 4em;
+}
+div.label {
+    text-align: center;
+    clear: both;
+    font-size: 2em;
+}
+a {
+    color: #000000;
+}
+</style>
+<script type="text/javascript">
+function set(id, content) {
+    var elt = document.getElementById(id);
+    if (elt != null) {
+        elt.innerText = content;
+    }
+}
+function fill(what, value) {
+    var label = what.charAt(0)
+    set(label, value == 1 ? what : what + "s");
+    set(label + 3, Math.floor(value/100));
+    set(label + 2, Math.floor(value/10)%10);
+    set(label + 1, value%10);
+}
+function setTime() {
+    var now = Date.now() / 1000;
+    var remaining = 0x7fffffff - now + 1;
+    if (remaining < 0) {
+      remaining = 0;
+    }
+    fill("Week", Math.floor(remaining / 604800));
+    fill("Day", Math.floor(remaining / 86400) % 7);
+    fill("Hour", Math.floor(remaining / 3600) % 24);
+    fill("Minute", Math.floor(remaining / 60) % 60);
+    fill("Second", Math.floor(remaining % 60));
+}
+function zoom() {
+  var zoom = 5;
+  var w = document.getElementById("weeks");
+  var s = document.getElementById("seconds");
+  var rules = document.styleSheets[1].cssRules;
+  var rule;
+  for (i=0; i<rules.length; i++) {
+    if (rules[i].selectorText == "div.digit") {
+      rule = rules[i];
+    }
+  }
+
+  rule.style.fontSize = "5em";
+  while(w.offsetTop != s.offsetTop && zoom > 1) {
+    zoom -= 0.5;
+    rule.style.fontSize = zoom + "em";
+  }
+}
+</script>
+</head>
+<body>
+  <h1>Unix clock rollover countdown</h1>
+  <h3><a href="https://en.m.wikipedia.org/wiki/Year_2038_problem">Time to go until 2038-01-19 03:14:08 UTC</a></h3>
+  <div id="weeks" class="section">
+    <div id="W3" class="digit">&numsp;</div>
+    <div id="W2" class="digit">&numsp;</div>
+    <div id="W1" class="digit">&numsp;</div>
+    <div class="label" id="W">Weeks</div>
+  </div>
+  <div id="days" class="section">
+    <div id="D1" class="digit">&numsp;</div>
+    <div class="label" id="D">Days</div>
+  </div>
+  <div id="hours" class="section">
+    <div id="H2" class="digit">&numsp;</div>
+    <div id="H1" class="digit">&numsp;</div>
+    <div class="label" id="H">Hours</div>
+  </div>
+  <div id="minutes" class="section">
+    <div id="M2" class="digit">&numsp;</div>
+    <div id="M1" class="digit">&numsp;</div>
+    <div class="label" id="M">Minutes</div>
+  </div>
+  <div id="seconds" class="section">
+    <div id="S2" class="digit">&numsp;</div>
+    <div id="S1" class="digit">&numsp;</div>
+    <div class="label" id="S">Seconds</div>
+  </div>
+</body>
+<script type="text/javascript">
+setTime();
+setInterval(setTime, 100);
+setTimeout(zoom, 100);
+window.addEventListener("resize", zoom);
+</script>
+</html>
