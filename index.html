@@ -50,6 +50,11 @@ div.label {
 a {
     color: #000000;
 }
+#progress {
+  width: 100%;
+  appearance: none;
+  height: 2em;
+}
 </style>
 <script type="text/javascript">
 function set(id, content) {
@@ -71,6 +76,7 @@ function setTime() {
     if (remaining < 0) {
       remaining = 0;
     }
+    document.getElementById("progress").value = 0x7fffffff - remaining;
     fill("Week", Math.floor(remaining / 604800));
     fill("Day", Math.floor(remaining / 86400) % 7);
     fill("Hour", Math.floor(remaining / 3600) % 24);
@@ -100,6 +106,7 @@ function zoom() {
 <body>
   <h1>Unix clock rollover countdown</h1>
   <h3><a href="https://en.m.wikipedia.org/wiki/Year_2038_problem">Time to go until 2038-01-19 03:14:08 UTC</a></h3>
+  <div>
   <div id="weeks" class="section">
     <div id="W3" class="digit">&numsp;</div>
     <div id="W2" class="digit">&numsp;</div>
@@ -125,6 +132,8 @@ function zoom() {
     <div id="S1" class="digit">&numsp;</div>
     <div class="label" id="S">Seconds</div>
   </div>
+  </div>
+  <progress id="progress" max="2147483648"></progress>
 </body>
 <script type="text/javascript">
 setTime();
